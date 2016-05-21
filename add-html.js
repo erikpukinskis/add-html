@@ -43,12 +43,17 @@ var addHtml = (function() {
     return crucible.firstChild
   }
 
-  addHtml.before =
-    function insertHtmlBefore(sibling, newHtml) {
-      var parent = sibling.parentNode
-      var newNode = htmlToNode(newHtml)
-      parent.insertBefore(newNode, sibling)
+  function insertHtmlBefore(sibling, newHtml) {
+    if (typeof newHtml != "string") {
+      throw new Error("You are trying to add \""+JSON.stringify(newHtml)+"\" as HTML but it's not a string. HTML is strings homeslice.")
     }
+
+    var parent = sibling.parentNode
+    var newNode = htmlToNode(newHtml)
+    parent.insertBefore(newNode, sibling)
+  }
+
+  addHtml.before = insertHtmlBefore
 
   addHtml.after =
     function insertHtmlAfter(sibling, newHtml) {
