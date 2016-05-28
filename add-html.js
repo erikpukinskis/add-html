@@ -10,6 +10,7 @@ var addHtml = (function() {
   }
 
   function addHtmlToContainer(container, newHtml) {
+    
     var crucible = document.createElement('div')
 
     crucible.innerHTML = newHtml
@@ -21,11 +22,16 @@ var addHtml = (function() {
   }
 
   function addHtml(html) {
-    addHtmlToContainer(body(), html)
+    if (window.__nrtvFocusSelector) {
+      var container = document.querySelector(window.__nrtvFocusSelector)
+    } else {
+      container = document.body
+    }
+
+    addHtmlToContainer(container, html)
   }
 
   addHtml.inside = addHtmlToContainer
-
 
   addHtml.inPlaceOf =
     function replaceNodeWithHtml(oldChild, newHtml) {
@@ -60,7 +66,7 @@ var addHtml = (function() {
       var newNode = htmlToNode(newHtml)
 
       if (sibling.nextSibling) {
-        insertHtmlBefore(sibling.nextSibling)
+        insertHtmlBefore(sibling.nextSibling, newHtml)
       } else {
         var parent = sibling.parentNode
         parent.appendChild(newNode)
