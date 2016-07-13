@@ -2,6 +2,7 @@
   "name": "add-html",
   "version": "0.4.0",
   "description": "Adds html here and there in different spots around DOM nodes",
+  "main": "add-html.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/erikpukinskis/add-html.git"

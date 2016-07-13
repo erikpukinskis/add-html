@@ -1,4 +1,10 @@
-var addHtml = (function() {
+if (require) {
+  module.exports = generator()
+} else {
+  var addHtml = generator()
+}
+
+function generator() {
 
   var cachedBody
 
@@ -35,6 +41,10 @@ var addHtml = (function() {
 
   addHtml.inPlaceOf =
     function replaceNodeWithHtml(oldChild, newHtml) {
+
+      if (oldChild == null) {
+        throw new Error("Tried to replace null with some HTML. You probably queried the DOM and didn't get anything back and then passed it to addHtml.inPlaceOf.")
+      }
 
       var newChild = htmlToNode(newHtml)
 
@@ -74,4 +84,4 @@ var addHtml = (function() {
     }
 
   return addHtml
-})()
+}
