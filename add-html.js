@@ -21,8 +21,8 @@ function generator() {
 
     crucible.innerHTML = newHtml
 
-    for(var i=0; crucible.children.length; i++) {
-      container.appendChild(crucible.children[i])
+    for(var i=0; crucible.childNodes.length; i++) {
+      container.appendChild(crucible.childNodes[i])
     }
 
   }
@@ -82,6 +82,6 @@ function generator() {
         parent.appendChild(newNode)
       }
     }
-
+  
   return addHtml
 }
