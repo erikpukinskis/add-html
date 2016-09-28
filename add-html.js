@@ -1,5 +1,5 @@
 if (require) {
-  module.exports = generator()
+  module.exports = require("nrtv-library")(require).export("add-html", generator)
 } else {
   var addHtml = generator()
 }
