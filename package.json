@@ -1,6 +1,6 @@
 {
   "name": "add-html",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Adds html here and there in different spots around DOM nodes",
   "main": "add-html.js",
   "dependencies": {
