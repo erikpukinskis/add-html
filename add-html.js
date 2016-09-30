@@ -16,6 +16,10 @@ function generator() {
   }
 
   function addHtmlToContainer(container, newHtml) {
+
+    if (typeof container == "string") {
+      container = document.querySelector(container)
+    }
     
     var crucible = document.createElement('div')
 
