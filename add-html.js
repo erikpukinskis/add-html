@@ -87,5 +87,15 @@ function generator() {
       }
     }
   
+  addHtml.defineOn = function(bridge) {
+    var binding = bridge.__addHtmlBinding
+
+    if (!binding) {
+      binding = bridge.__addHtmlBinding = bridge.defineSingleton("addHtml", generator)
+    }
+
+    return binding
+  }
+
   return addHtml
 }
