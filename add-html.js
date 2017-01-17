@@ -88,10 +88,11 @@ function generator() {
     }
   
   addHtml.defineOn = function(bridge) {
-    var binding = bridge.__addHtmlBinding
+    var binding = bridge.remember("add-html")
 
     if (!binding) {
-      binding = bridge.__addHtmlBinding = bridge.defineSingleton("addHtml", generator)
+      binding = bridge.defineSingleton("addHtml", generator)
+      bridge.see("add-html", binding)
     }
 
     return binding
