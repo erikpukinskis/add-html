@@ -32,13 +32,23 @@ function generator() {
   }
 
   function addHtml(html) {
-    if (window.__nrtvFocusSelector) {
-      var container = document.querySelector(window.__nrtvFocusSelector)
+    if (focusSelector) {
+      var container = document.querySelector(focusSelector)
+
+      if (!container) {
+        throw new Error("You wanted to add HTML to "+focusSelector+" by default, but we can't find any elements that match that selector.")
+      }
     } else {
       container = document.body
     }
 
     addHtmlToContainer(container, html)
+  }
+
+  var focusSelector
+
+  addHtml.defaultIn = function(selector) {
+    focusSelector = selector
   }
 
   addHtml.inside = addHtmlToContainer
