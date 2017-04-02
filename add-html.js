@@ -6,26 +6,7 @@ if (require) {
 
 function generator() {
 
-  var cachedBody
-
-  function body() {
-    if (!cachedBody) {
-      cachedBody = document.querySelector("body")
-    }
-    return cachedBody
-  }
-
-  function addHtmlToContainer(container, newHtml) {
-
-    if (typeof container == "string") {
-      container = document.querySelector(container)
-    }
-    
-    eachNode(newHtml, function(node) {
-      container.appendChild(node)
-    })
-  }
-
+  var focusSelector
 
   function addHtml(html) {
     if (focusSelector) {
@@ -38,42 +19,80 @@ function generator() {
       container = document.body
     }
 
-    addHtmlToContainer(container, html)
+    addHtmlInside(container, html)
   }
 
-  var focusSelector
-
-  addHtml.defaultIn = function(selector) {
-    focusSelector = selector
-  }
-
-  addHtml.inside = addHtmlToContainer
-
-  addHtml.inPlaceOf =
-    function replaceNodeWithHtml(oldChild, newHtml) {
-
-      if (oldChild == null) {
-        throw new Error("Tried to replace null with some HTML. You probably queried the DOM and didn't get anything back and then passed it to addHtml.inPlaceOf.")
-      }
-
-      var parent = oldChild.parentNode
-
-      var lastAdded
-
-      eachNode(newHtml, function(node) {
-        if (lastAdded) {
-          parent.replaceChild(node, oldChild)
-        } else {
-          if (lastAdded.nextSibling) {
-            parent.insertBefore(node, lastAdded.nextSibling)
-          } else {
-            parent.appendChild(node)
-          }
-        }
-        lastAdded = node
-      })
-
+  addHtml.defaultIn =
+    function(selector) {
+      focusSelector = selector
     }
+
+  addHtml.inside = addHtmlInside
+
+  addHtml.before = addHtmlBefore
+
+  addHtml.after = addHtmlAfter
+
+  addHtml.inPlaceOf = addHtmlInPlaceOf
+
+  function addHtmlInside(container, newHtml) {
+
+    if (typeof container == "string") {
+      container = document.querySelector(container)
+    }
+    
+    eachNode(newHtml, function(node) {
+      container.appendChild(node)
+    })
+  }
+
+  function addHtmlInPlaceOf(oldChild, newHtml) {
+
+    if (oldChild == null) {
+      throw new Error("Tried to replace null with some HTML. You probably queried the DOM and didn't get anything back and then passed it to addHtml.inPlaceOf.")
+    }
+
+    var parent = oldChild.parentNode
+
+    var lastAdded
+
+    eachNode(newHtml, function(node) {
+      if (lastAdded) {
+        parent.replaceChild(node, oldChild)
+      } else {
+        if (lastAdded.nextSibling) {
+          parent.insertBefore(node, lastAdded.nextSibling)
+        } else {
+          parent.appendChild(node)
+        }
+      }
+      lastAdded = node
+    })
+  }
+
+  function addHtmlBefore(sibling, newHtml) {
+    if (typeof newHtml != "string") {
+      throw new Error("You are trying to add \""+JSON.stringify(newHtml)+"\" as HTML but it's not a string. HTML is strings homeslice.")
+    }
+
+    var parent = sibling.parentNode
+
+    eachNode(newHtml, function(node) {
+      parent.insertBefore(node, sibling)
+    })
+  }
+
+  function addHtmlAfter(sibling, newHtml) {
+
+    if (sibling.nextSibling) {
+      addHtmlBefore(sibling.nextSibling, newHtml)
+    } else {
+      var parent = sibling.parentNode
+      eachNode(newHtml, function(node) {
+        parent.appendChild(node)
+      })
+    }
+  }
 
   function eachNode(html, callback) {
 
@@ -94,33 +113,6 @@ function generator() {
     }
   }
 
-  function insertHtmlBefore(sibling, newHtml) {
-    if (typeof newHtml != "string") {
-      throw new Error("You are trying to add \""+JSON.stringify(newHtml)+"\" as HTML but it's not a string. HTML is strings homeslice.")
-    }
-
-    var parent = sibling.parentNode
-
-    eachNode(newHtml, function(node) {
-      parent.insertBefore(node, sibling)
-    })
-  }
-
-  addHtml.before = insertHtmlBefore
-
-  addHtml.after =
-    function insertHtmlAfter(sibling, newHtml) {
-
-      if (sibling.nextSibling) {
-        insertHtmlBefore(sibling.nextSibling, newHtml)
-      } else {
-        var parent = sibling.parentNode
-        eachNode(newHtml, function(node) {
-          parent.appendChild(node)
-        })
-      }
-    }
-  
   addHtml.defineOn = function(bridge) {
     var binding = bridge.remember("add-html")
 
