@@ -21,15 +21,11 @@ function generator() {
       container = document.querySelector(container)
     }
     
-    var crucible = document.createElement('div')
-
-    crucible.innerHTML = newHtml
-
-    while(crucible.childNodes.length > 0) {
-      container.appendChild(crucible.childNodes[0])
-    }
-
+    eachNode(newHtml, function(node) {
+      container.appendChild(node)
+    })
   }
+
 
   function addHtml(html) {
     if (focusSelector) {
@@ -60,17 +56,42 @@ function generator() {
         throw new Error("Tried to replace null with some HTML. You probably queried the DOM and didn't get anything back and then passed it to addHtml.inPlaceOf.")
       }
 
-      var newChild = htmlToNode(newHtml)
-
       var parent = oldChild.parentNode
 
-      parent.replaceChild(newChild, oldChild)
+      var lastAdded
+
+      eachNode(newHtml, function(node) {
+        if (lastAdded) {
+          parent.replaceChild(node, oldChild)
+        } else {
+          if (lastAdded.nextSibling) {
+            parent.insertBefore(node, lastAdded.nextSibling)
+          } else {
+            parent.appendChild(node)
+          }
+        }
+        lastAdded = node
+      })
+
     }
 
-  function htmlToNode(html) {
+  function eachNode(html, callback) {
+
     var crucible = document.createElement('div')
+
     crucible.innerHTML = html
-    return crucible.firstChild
+
+    var lastNode
+
+    while(crucible.childNodes.length > 0) {
+      var nextNode = crucible.childNodes[0]
+      if (lastNode == nextNode) {
+        throw new Error("eachNode callback needs to remove the node it gets from the crucible.")
+      } else {
+        lastNode = nextNode
+      }
+      callback(nextNode)
+    }
   }
 
   function insertHtmlBefore(sibling, newHtml) {
@@ -79,21 +100,24 @@ function generator() {
     }
 
     var parent = sibling.parentNode
-    var newNode = htmlToNode(newHtml)
-    parent.insertBefore(newNode, sibling)
+
+    eachNode(newHtml, function(node) {
+      parent.insertBefore(node, sibling)
+    })
   }
 
   addHtml.before = insertHtmlBefore
 
   addHtml.after =
     function insertHtmlAfter(sibling, newHtml) {
-      var newNode = htmlToNode(newHtml)
 
       if (sibling.nextSibling) {
         insertHtmlBefore(sibling.nextSibling, newHtml)
       } else {
         var parent = sibling.parentNode
-        parent.appendChild(newNode)
+        eachNode(newHtml, function(node) {
+          parent.appendChild(node)
+        })
       }
     }
   
