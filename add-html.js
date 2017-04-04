@@ -35,6 +35,18 @@ function generator() {
 
   addHtml.inPlaceOf = addHtmlInPlaceOf
 
+  addHtml.atTopOf = addHtmAtTopOf
+
+  function addHtmAtTopOf(container, newHtml) {
+    var oldLeader = container.firstChild
+
+    if (oldLeader) {
+      addHtml.before(oldLeader, newHtml)
+    } else {
+      addHtml.inside(container, newHtml)
+    }
+  }
+
   function addHtmlInside(container, newHtml) {
 
     if (typeof container == "string") {
