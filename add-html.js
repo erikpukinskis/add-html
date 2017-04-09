@@ -23,8 +23,13 @@ function generator() {
   }
 
   addHtml.defaultIn =
-    function(selector) {
+    function(selector, handler) {
+      var oldSelector = focusSelector
       focusSelector = selector
+      if (handler) {
+        handler()
+        focusSelector = oldSelector
+      }
     }
 
   addHtml.inside = addHtmlInside
