@@ -113,6 +113,10 @@ function generator() {
 
   function eachNode(html, callback) {
 
+    if (html.__isNrtvElement) {
+      throw new Error("addHtml expects you to give it an HTML string. You gave it a web element. Try addHtml(yourElement.html())")
+    }
+
     var crucible = document.createElement('div')
 
     crucible.innerHTML = html
