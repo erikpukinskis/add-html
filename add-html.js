@@ -114,7 +114,7 @@ function generator() {
   function eachNode(html, callback) {
 
     if (html.__isNrtvElement) {
-      throw new Error("addHtml expects you to give it an HTML string. You gave it a web element. Try addHtml(yourElement.html())")
+      throw new Error("addHtml expects you to give it an HTML string. You gave it a web element:\n\n"+html.html()+"\n\nTry addHtml(yourElement.html())\n")
     }
 
     var crucible = document.createElement('div')
