@@ -53,14 +53,23 @@ function generator() {
   }
 
   function addHtmlInside(container, newHtml) {
-
     if (typeof container == "string") {
       container = document.querySelector(container)
+    } else if (!isNode(container)) {
+      throw new Error("If you want to addHtml in or around a DOM node, you need to pass either  a selector string or a DOM node. You passed "+container)
     }
     
     eachNode(newHtml, function(node) {
       container.appendChild(node)
     })
+  }
+
+  function isNode(thing){
+    if (typeof Node === "object") {
+      return thing instanceof Node
+    }
+
+    return thing && typeof thing === "object" && typeof thing.nodeType === "number" && typeof thing.nodeName === "string"
   }
 
   function addHtmlInPlaceOf(oldChild, newHtml) {
