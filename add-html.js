@@ -59,7 +59,7 @@ function generator() {
       throw new Error("If you want to addHtml in or around a DOM node, you need to pass either  a selector string or a DOM node. You passed "+container)
     }
     
-    eachNode(newHtml, function(node) {
+    return eachNode(newHtml, function(node) {
       container.appendChild(node)
     })
   }
@@ -82,7 +82,7 @@ function generator() {
 
     var lastAdded
 
-    eachNode(newHtml, function(node) {
+    return eachNode(newHtml, function(node) {
       if (lastAdded) {
         parent.replaceChild(node, oldChild)
       } else {
@@ -103,7 +103,7 @@ function generator() {
 
     var parent = sibling.parentNode
 
-    eachNode(newHtml, function(node) {
+    return eachNode(newHtml, function(node) {
       parent.insertBefore(node, sibling)
     })
   }
@@ -111,10 +111,10 @@ function generator() {
   function addHtmlAfter(sibling, newHtml) {
 
     if (sibling.nextSibling) {
-      addHtmlBefore(sibling.nextSibling, newHtml)
+      return addHtmlBefore(sibling.nextSibling, newHtml)
     } else {
       var parent = sibling.parentNode
-      eachNode(newHtml, function(node) {
+      return eachNode(newHtml, function(node) {
         parent.appendChild(node)
       })
     }
@@ -131,7 +131,7 @@ function generator() {
     crucible.innerHTML = html
 
     var lastNode
-
+    
     while(crucible.childNodes.length > 0) {
       var nextNode = crucible.childNodes[0]
       if (lastNode == nextNode) {
@@ -141,6 +141,8 @@ function generator() {
       }
       callback(nextNode)
     }
+    
+    return crucible.childNodes
   }
 
   addHtml.defineOn = function(bridge) {
