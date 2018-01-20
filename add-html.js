@@ -131,9 +131,11 @@ function generator() {
     crucible.innerHTML = html
 
     var lastNode
-    
+    var nodes = []
+
     while(crucible.childNodes.length > 0) {
       var nextNode = crucible.childNodes[0]
+      nodes.push(nextNode)
       if (lastNode == nextNode) {
         throw new Error("eachNode callback needs to remove the node it gets from the crucible.")
       } else {
@@ -142,7 +144,7 @@ function generator() {
       callback(nextNode)
     }
     
-    return crucible.childNodes
+    return nodes
   }
 
   addHtml.defineOn = function(bridge) {
