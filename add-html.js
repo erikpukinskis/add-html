@@ -19,7 +19,7 @@ function generator() {
       container = document.body
     }
 
-    addHtmlInside(container, html)
+    return addHtmlInside(container, html)
   }
 
   addHtml.defaultIn =
