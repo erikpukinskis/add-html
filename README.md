@@ -16,3 +16,10 @@ Or just add it to the bottom of the DOM:
 ```javascript
 addHtml(newHtml)
 ```
+
+If you want to do something with the nodes that were added, they are returned:
+
+```javascript
+var items = addHtml("<li>one</li><li>two</li><li>three</li>")
+items[0].classList.add("selected")
+```
