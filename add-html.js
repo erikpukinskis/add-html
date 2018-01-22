@@ -34,6 +34,8 @@ function generator() {
 
   addHtml.inside = addHtmlInside
 
+  addHtml.firstIn = addHtmlFirstIn
+
   addHtml.before = addHtmlBefore
 
   addHtml.after = addHtmlAfter
@@ -64,6 +66,18 @@ function generator() {
     })
   }
 
+  function addHtmlFirstIn(container, newHtml) {
+
+    if (typeof container == "string") {
+      container = document.querySelector(container)
+    } else if (!isNode(container)) {
+      throw new Error("If you want to addHtml in or around a DOM node, you need to pass either  a selector string or a DOM node. You passed "+container)
+    }
+    
+    return eachNode(newHtml, function(node) {
+      container.prepend(node)
+    })
+  }
   function isNode(thing){
     if (typeof Node === "object") {
       return thing instanceof Node
