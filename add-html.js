@@ -9,6 +9,9 @@ function generator() {
   var focusSelector
 
   function addHtml(html) {
+    if (arguments.length > 1) {
+      throw new Error("addHtml only takes one argument")
+    }
     if (focusSelector) {
       var container = document.querySelector(focusSelector)
 
