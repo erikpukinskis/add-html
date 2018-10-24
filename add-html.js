@@ -91,7 +91,9 @@ function generator() {
 
   function addHtmlInPlaceOf(oldChild, newHtml) {
 
-    if (oldChild == null) {
+    if (typeof oldChild == "string") {
+      oldChild = document.querySelector(oldChild)
+    } else if (oldChild == null) {
       throw new Error("Tried to replace null with some HTML. You probably queried the DOM and didn't get anything back and then passed it to addHtml.inPlaceOf.")
     }
 
@@ -114,6 +116,9 @@ function generator() {
   }
 
   function addHtmlBefore(sibling, newHtml) {
+    if (typeof sibling == "string") {
+      sibling = document.querySelector(sibling)
+    }
     if (typeof newHtml != "string") {
       throw new Error("You are trying to add \""+JSON.stringify(newHtml)+"\" as HTML but it's not a string. HTML is strings homeslice.")
     }
@@ -127,7 +132,9 @@ function generator() {
 
   function addHtmlAfter(sibling, newHtml) {
 
-    if (sibling.nextSibling) {
+    if (typeof sibling == "string") {
+      sibling = document.querySelector(sibling)
+    } else if (sibling.nextSibling) {
       return addHtmlBefore(sibling.nextSibling, newHtml)
     } else {
       var parent = sibling.parentNode
