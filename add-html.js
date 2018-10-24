@@ -134,7 +134,9 @@ function generator() {
 
     if (typeof sibling == "string") {
       sibling = document.querySelector(sibling)
-    } else if (sibling.nextSibling) {
+    }
+
+    if (sibling.nextSibling) {
       return addHtmlBefore(sibling.nextSibling, newHtml)
     } else {
       var parent = sibling.parentNode
