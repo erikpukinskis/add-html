@@ -39,13 +39,11 @@ You can also just set the default temporarily by passing a handler function:
 ```javascript
 addHtml.defaultIn(".content")
 // ...
-addHtml.defaultIn(
-  ".sidebar-notes",
-  function() {
-    addStuffHere()
-    moreStuff() // these modules can all use addHtml 
-                // with no parameters, and any code
-                // they add will go into the sidebar
-  })
+addHtml.defaultIn(".sidebar-notes", function() {
+  addStuffHere()
+  moreStuff() // these modules can all use addHtml 
+              // with no parameters, and any code
+              // they add will go into the sidebar
+})
 addHtml("process complete") // this goes in .content
 ```
