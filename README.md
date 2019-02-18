@@ -37,6 +37,8 @@ This will add **Hiya** to the `.content` div, as will any subsequent addHtml cal
 You can also just set the default temporarily by passing a handler function:
 
 ```javascript
+addHtml.defaultIn(".content")
+// ...
 addHtml.defaultIn(
   ".sidebar-notes",
   function() {
@@ -45,4 +47,5 @@ addHtml.defaultIn(
                 // with no parameters, and any code
                 // they add will go into the sidebar
   })
-``
+addHtml("process complete") // this goes in .content
+```
