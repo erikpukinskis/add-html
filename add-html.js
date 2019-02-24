@@ -119,9 +119,6 @@ function generator() {
     if (typeof sibling == "string") {
       sibling = document.querySelector(sibling)
     }
-    if (typeof newHtml != "string") {
-      throw new Error("You are trying to add \""+JSON.stringify(newHtml)+"\" as HTML but it's not a string. HTML is strings homeslice.")
-    }
 
     var parent = sibling.parentNode
 
@@ -150,6 +147,12 @@ function generator() {
 
     if (html.__isNrtvElement) {
       throw new Error("addHtml expects you to give it an HTML string. You gave it a web element:\n\n"+html.html()+"\n\nTry addHtml(yourElement.html())\n")
+    }
+
+    if (typeof html != "string") {
+      var alreadyANode = html
+      callback(alreadyANode)
+      return [alreadyANode]
     }
 
     var crucible = document.createElement('div')
